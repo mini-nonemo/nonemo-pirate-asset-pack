@@ -1,0 +1,21 @@
+#!/bin/bash
+
+rm -rf .tmp || continue
+mkdir .tmp
+cp -rp assets/* .tmp
+rm -rf .tmp/**/.gitkeep
+
+for dir in .tmp/*/
+do
+    cp .tmp/license.md $dir
+    dir=${dir%*/}
+    name="${dir##*/}"
+
+    pwd=$PWD
+    (cd $dir ; zip -r $pwd/.tmp/$name.zip .)
+    rm -rf $dir
+done
+
+rm .tmp/license.md
+rm -rf build || continue
+mv .tmp build
